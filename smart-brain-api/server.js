@@ -84,23 +84,18 @@ app.get('/profile/:id', (req, res) => {
     .catch(err => res.status(400).json('error getting user'));
 });
 
+// update user image entries
 app.put('/image', (req, res) => {
   const {id} = req.body;
-  let found = false;
 
-  database.users.forEach(user => {
-    if (user.id === id) {
-      found = true;
-      user.entries++;
-      return res.json(user.entries);
-    }
-  });
-
-  if (!found) {
-    res.status(400).json('user not found');
-  }
+  db('users').where('id', '=', id)
+    .increment('entries', 1)
+    .returning('entries')
+    .then(entries => res.json(entries[0]))
+    .catch(err => res.status(400).json('unable to get entries'));
 });
 
+// register new user
 app.post('/register', (req, res) => {
   const { email, name, password } = req.body;
   // bcrypt.hash(password, null, null, function(err, hash) {
@@ -119,11 +114,6 @@ app.post('/register', (req, res) => {
     })
     .catch(err => res.status(400).json('Unable to register.'));
 });
-
-// Load hash from your password DB.
-// bcrypt.compare("bacon", hash, function(err, res) {
-//   // res == true
-// });
 
 const port = 5000;
 app.listen(port, () => {
