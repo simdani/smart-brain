@@ -105,13 +105,17 @@ app.post('/register', (req, res) => {
   //   console.log(hash);
   // });
 
-  db('users').insert({
-    email: email,
-    name: name,
-    joined: new Date()
-  }).then(result => console.log(result));
-
-  res.json(database.users[database.users.length - 1]);
+  db('users')
+    .returning('*')
+    .insert({
+      email: email,
+      name: name,
+      joined: new Date()
+    })
+    .then(user => {
+      res.json(user[0]);
+    })
+    .catch(err => res.status(400).json('Unable to register.'));
 });
 
 // Load hash from your password DB.
