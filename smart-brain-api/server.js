@@ -36,6 +36,8 @@ app.post('/signin', (req, res) => { signin.handleSignin(req, res, db, bcrypt)});
 app.get('/profile/:id', (req, res) => { profile.handleProfileGet(req, res, db)});
 // update user image entries
 app.put('/image', (req, res) => { image.handleImage(req, res, db)});
+
+app.post('/imageurl', (req, res) => { image.handleApiCall(req, res)});
 // register new user
 app.post('/register', (req, res) => { register.handleRegister(req, res, db, bcrypt) });
 
