@@ -41,7 +41,7 @@ app.post('/imageurl', (req, res) => { image.handleApiCall(req, res)});
 // register new user
 app.post('/register', (req, res) => { register.handleRegister(req, res, db, bcrypt) });
 
-const port = 5000;
+const port = process.env.PORT || 5000;
 app.listen(port, () => {
   console.log(`server is running in port ${port}`);
 });
